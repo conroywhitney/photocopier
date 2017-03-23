@@ -51,6 +51,14 @@ RSpec.describe Photocopier::FTP do
         expect(ftp.send(:remote_ftp_url)).to eq("ftps://host")
       end
     end
+
+    context "when called multiple times" do
+      let(:options) do { host: "host", password: "password", scheme: "ftps", user: "user" } end
+
+      before { 3.times { ftp.send(:remote_ftp_url) } }
+
+      specify { expect(ftp.send(:remote_ftp_url)).to eq("ftps://user:password@host") }
+    end
   end
 
   xcontext "#lftp_mirror_arguments" do
